@@ -2,7 +2,6 @@ package main
 
 import (
 	"encoding/json"
-	"errors"
 	"fmt"
 	"io/ioutil"
 	"log"
@@ -10,6 +9,7 @@ import (
 	"strconv"
 
 	"github.com/TylerBrock/colorjson"
+	"github.com/pkg/errors"
 
 	"strings"
 )
@@ -68,27 +68,48 @@ func lookup(key string, data []byte) ([]byte, error) {
 	return data, nil
 }
 
-func formatJSON(data []byte) ([]byte, error) {
+type formatter interface {
+	Marshal(interface{}) ([]byte, error)
+}
+
+func formatJSON(f formatter, data []byte) ([]byte, error) {
 	v, _ := getObject(data)
 	if err := json.Unmarshal(data, &v); err != nil {
 		return data, err
 	}
-	formattedJSON, err := colorjson.Marshal(v)
+	formattedJSON, err := f.Marshal(v)
 	if err != nil {
 		return data, err
 	}
 	return formattedJSON, nil
 }
 
+func getKey() string {
+	if len(os.Args) == 1 {
+		return ""
+	}
+	key := strings.TrimSpace(os.Args[1])
+	return strings.TrimFunc(key, func(c rune) bool { return c == '.' })
+}
+
 func main() {
-	data, _ := ioutil.ReadAll(os.Stdin)
+	data, err := ioutil.ReadAll(os.Stdin)
+	if err != nil {
+		log.Panicf("reading input error : %v", err)
+	}
 	defer os.Stdin.Close()
 
-	data, err := lookup(os.Args[1], data)
-	if err != nil {
-		log.Panic(err)
+	key := getKey()
+	if key != "" {
+		data, err = lookup(key, data)
+		if err != nil {
+			log.Println("Error occurred looking up key . Error : ", err)
+			return
+		}
 	}
-	formattedJSON, err := formatJSON(data)
+	f := colorjson.NewFormatter()
+	f.Indent = 4
+	formattedJSON, err := formatJSON(f, data)
 	if err != nil {
 		log.Panic(err)
 	}
