@@ -3,7 +3,6 @@ BIN ?= bin
 APP ?= gojson
 
 
-
 clean:
 	rm -rf bin
 	go clean -r . 

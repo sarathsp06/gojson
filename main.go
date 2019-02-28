@@ -3,12 +3,10 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"log"
 	"os"
 	"strconv"
 
-	"github.com/TylerBrock/colorjson"
 	"github.com/pkg/errors"
 
 	"strings"
@@ -68,22 +66,6 @@ func lookup(key string, data []byte) ([]byte, error) {
 	return data, nil
 }
 
-type formatter interface {
-	Marshal(interface{}) ([]byte, error)
-}
-
-func formatJSON(f formatter, data []byte) ([]byte, error) {
-	v, _ := getObject(data)
-	if err := json.Unmarshal(data, &v); err != nil {
-		return data, err
-	}
-	formattedJSON, err := f.Marshal(v)
-	if err != nil {
-		return data, err
-	}
-	return formattedJSON, nil
-}
-
 func getKey() string {
 	if len(os.Args) == 1 {
 		return ""
@@ -93,13 +75,12 @@ func getKey() string {
 }
 
 func main() {
-	data, err := ioutil.ReadAll(os.Stdin)
-	if err != nil {
-		log.Panicf("reading input error : %v", err)
-	}
-	defer os.Stdin.Close()
-
 	key := getKey()
+	data, err := getInput()
+	if err != nil {
+		log.Printf("Error reading input: %s", err)
+		return
+	}
 	if key != "" {
 		data, err = lookup(key, data)
 		if err != nil {
@@ -107,9 +88,7 @@ func main() {
 			return
 		}
 	}
-	f := colorjson.NewFormatter()
-	f.Indent = 4
-	formattedJSON, err := formatJSON(f, data)
+	formattedJSON, err := formatJSON(data)
 	if err != nil {
 		log.Panic(err)
 	}
