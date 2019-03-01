@@ -7,14 +7,13 @@ import (
 	"os"
 	"strconv"
 
-	"github.com/pkg/errors"
-
 	"strings"
 )
 
-//getObject returns the object into which the json can be decoded
+// getObject returns the object into which the json can be decoded
 func getObject(jsn []byte) (interface{}, bool) {
 	if len(jsn) == 0 {
+		//TODO: This is an error condition deal with it later
 		return json.RawMessage{}, false
 	}
 	switch jsn[0] {
@@ -27,8 +26,7 @@ func getObject(jsn []byte) (interface{}, bool) {
 	case '"', '\'':
 		return "", false
 	default:
-		return 0, false
-
+		return 0.0, false
 	}
 }
 
@@ -46,7 +44,7 @@ func lookup(key string, data []byte) ([]byte, error) {
 			}
 			data, ok = v[key]
 			if !ok {
-				return nil, errors.New("invalid key")
+				return nil, nil
 			}
 		case []json.RawMessage:
 			if err := json.Unmarshal(data, &v); err != nil {
@@ -54,10 +52,10 @@ func lookup(key string, data []byte) ([]byte, error) {
 			}
 			idx, err := strconv.Atoi(key)
 			if err != nil {
-				return nil, errors.New("invalid key:" + key)
+				return nil, nil
 			}
 			if len(v) < idx || idx < 0 {
-				return nil, errors.New("invalid index:" + key)
+				return nil, nil
 			}
 			data = v[idx]
 		}
@@ -90,7 +88,7 @@ func main() {
 	}
 	formattedJSON, err := formatJSON(data)
 	if err != nil {
-		log.Panic(err)
+		fmt.Printf("Invalid JSON:%s,Error:%s", string(data), err)
 	}
 	fmt.Printf("%s\n", string(formattedJSON))
 }
