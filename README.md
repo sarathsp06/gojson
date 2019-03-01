@@ -26,26 +26,30 @@ Or you may download the binary here [download](https://github.com/sarathsp06/goj
 
 ##### Getting a value 
 
-Get a string:
+* Get a string:
 ```sh
-$ echo '{"name":{"first":"Tom","last":"Smith"}}' | gojson name.last
-Smith
+$ echo '{"name":{"first":"Sarath","last":"Pillai"}}' | gojson name.last
+"Pillai"
 ```
 
-Get a block of JSON:
+* Get a block of JSON:
 ```sh
-$ echo '{"name":{"first":"Tom","last":"Smith"}}' | gojson name
-{"first":"Tom","last":"Smith"}
+$ echo '{"name":{"first":"Sarath","last":"Pillai"}}'  | gojson name
+
+{
+  "first": "Sarath",
+  "last": "Pillai"
+}
 ```
 
-Try to get a non-existent key:
+* Try to get a non-existent key:
 ```sh
-$ echo '{"name":{"first":"Tom","last":"Smith"}}' | gojson name.middle
-null
+$ echo '{"name":{"first":"Sarath","last":"Pillai"}}' | gojson names
+nil
 ```
 
 Get an array value by index:
 ```sh
-$ echo '{"friends":["Tom","Jane","Carol"]}' | jj friends.1
-Jane
+$ echo '{"people":[{"name":"saratha"},{"name":"syam"}]}' | gojson people.1.name                                               
+"syam"
 ```
