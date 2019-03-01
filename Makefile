@@ -1,4 +1,4 @@
-GO ?= "GO111MODULE=on go"
+GO ?= GO111MODULE=on go
 BIN ?= release
 APP ?= gojson
 GOOS ?= linux
