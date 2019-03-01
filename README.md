@@ -2,10 +2,10 @@ GoJSON is a command line utility to handle json in command line.
 
 ### What it does
 
-[x] Retrieve nested objects
-[x] Pretty print JSON
-[x] Validate JSON
-[x] Aggregate finct
+- [x] Retrieve nested objects
+- [x] Pretty print JSON
+- [x] Validate JSON
+- [ ] Aggregate finct
 
 
 ## Installing
