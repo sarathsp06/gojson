@@ -4,7 +4,7 @@ APP ?= gojson
 GOOS ?= linux
 GOARCH ?= amd64
 
-clean:
+clean: mod
 	rm -rf $(BIN)
 	go clean -r . 
 	go clean -cache
