@@ -1,23 +1,35 @@
 GO ?= go
 BIN ?= release
 APP ?= gojson
-
+GOOS ?= linux
+GOARCH ?= amd64
 
 clean:
 	rm -rf $(BIN)
 	go clean -r . 
+	go clean -cache
 	go clean -testcache
 	mkdir -p $(BIN)
 
+mod:
+	$(GO) mod tidy -v
+
 install:
-	go install 
+	$(GO) install 
 
 linux: clean
-	GOOS=linux GOARCH=amd64 go build -o $(BIN)/$(APP)-linux-amd64 .
+	GOOS=linux GOARCH=amd64 $(GO) build -o $(BIN)/$(APP)-linux-amd64 .
 
 darwin: clean
-	GOOS=darwin GOARCH=amd64 go build -o $(BIN)/$(APP)-darwin-amd64 .
+	GOOS=darwin GOARCH=amd64 $(GO) build -o $(BIN)/$(APP) .
+
+build: mod
+	GOOS=$(GOOS) GOARCH=$(GOARCH) $(GO) build -o $(BIN)/$(APP)-$(GOOS)-$(GOARCH) .
+
+build-all:
+	$(GO) tool dist list  | xargs -I {} python -c "import sys;os,arch=sys.argv[1].split('/');print 'GOOS=%s GOARCH=%s make build' %(os,arch)" {} | sh
+
 
 
 release: linux darwin
-.PHONY: release linux darwin clean install
+.PHONY: release mod install darwin linux build build-all
