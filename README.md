@@ -16,7 +16,12 @@ With go
 $ go get -u github.com/sarathsp06/gojson
 ```
 
-Or you may download the binary here [download](https://github.com/sarathsp06/gojson)
+Or you may download the binary here [download](https://github.com/sarathsp06/gojson/tree/master/release) and use the binary as such
+
+
+**Tip:**
+> In unix move the binary to PATH
+
 
 #### Key Syntax
 * Key is a set of `.` seperated nested keys
