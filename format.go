@@ -53,45 +53,6 @@ func PrettyOptions(json []byte, opts *Options) []byte {
 	return buf
 }
 
-// Ugly removes insignificant space characters from the input json byte slice
-// and returns the compacted result.
-func Ugly(json []byte) []byte {
-	buf := make([]byte, 0, len(json))
-	return ugly(buf, json)
-}
-
-// UglyInPlace removes insignificant space characters from the input json
-// byte slice and returns the compacted result. This method reuses the
-// input json buffer to avoid allocations. Do not use the original bytes
-// slice upon return.
-func UglyInPlace(json []byte) []byte { return ugly(json, json) }
-
-func ugly(dst, src []byte) []byte {
-	dst = dst[:0]
-	for i := 0; i < len(src); i++ {
-		if src[i] > ' ' {
-			dst = append(dst, src[i])
-			if src[i] == '"' {
-				for i = i + 1; i < len(src); i++ {
-					dst = append(dst, src[i])
-					if src[i] == '"' {
-						j := i - 1
-						for ; ; j-- {
-							if src[j] != '\\' {
-								break
-							}
-						}
-						if (j-i)%2 != 0 {
-							break
-						}
-					}
-				}
-			}
-		}
-	}
-	return dst
-}
-
 func appendPrettyAny(buf, json []byte, i int, pretty bool, width int, prefix, indent string, sortkeys bool, tabs, nl, max int) ([]byte, int, int, bool) {
 	for ; i < len(json); i++ {
 		if json[i] <= ' ' {
@@ -140,6 +101,7 @@ func (arr *byKey) Less(i, j int) bool {
 	key2 := arr.json[arr.pairs[j].kstart+1 : arr.pairs[j].kend-1]
 	return string(key1) < string(key2)
 }
+
 func (arr *byKey) Swap(i, j int) {
 	arr.pairs[i], arr.pairs[j] = arr.pairs[j], arr.pairs[i]
 	arr.sorted = true
