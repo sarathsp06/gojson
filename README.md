@@ -1,3 +1,5 @@
+## GoJSON [![Build Status](https://travis-ci.org/sarathsp06/gojson.svg?branch=master)](https://travis-ci.org/sarathsp06/gojson)
+
 GoJSON is a command line utility to handle json in command line. 
 
 ### What it does
