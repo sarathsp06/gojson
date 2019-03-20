@@ -74,7 +74,6 @@ func getKey() string {
 
 func main() {
 	key := getKey()
-	// TODO : Support inputs other than stdin
 	data, err := getInput()
 	if err != nil {
 		log.Printf("Error reading input: %s", err)
