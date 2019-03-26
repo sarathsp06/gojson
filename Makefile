@@ -6,9 +6,9 @@ GOARCH ?= amd64
 
 clean: mod
 	rm -rf $(BIN)
-	go clean -r . 
-	go clean -cache
-	go clean -testcache
+	$(GO) clean -r . 
+	$(GO) clean -cache
+	$(GO) clean -testcache
 	mkdir -p $(BIN)
 
 mod:
