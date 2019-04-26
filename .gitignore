@@ -1,3 +1,4 @@
 bin/
 sonar.sh
+release/
 .scannerwork/
