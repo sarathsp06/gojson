@@ -1,13 +1,13 @@
 mode: set
-github.com/sarathsp06/gojson/format.go:9.46,10.20 1 0
-github.com/sarathsp06/gojson/format.go:13.2,14.51 2 0
-github.com/sarathsp06/gojson/format.go:17.2,19.23 3 0
-github.com/sarathsp06/gojson/format.go:10.20,12.3 1 0
-github.com/sarathsp06/gojson/format.go:14.51,16.3 1 0
+github.com/sarathsp06/gojson/format.go:9.46,10.20 1 1
+github.com/sarathsp06/gojson/format.go:13.2,14.51 2 1
+github.com/sarathsp06/gojson/format.go:17.2,19.23 3 1
+github.com/sarathsp06/gojson/format.go:10.20,12.3 1 1
+github.com/sarathsp06/gojson/format.go:14.51,16.3 1 1
 github.com/sarathsp06/gojson/input.go:10.37,12.2 1 0
-github.com/sarathsp06/gojson/input.go:16.33,20.16 4 0
-github.com/sarathsp06/gojson/input.go:23.2,23.18 1 0
-github.com/sarathsp06/gojson/input.go:20.16,22.3 1 0
+github.com/sarathsp06/gojson/input.go:16.58,19.16 3 0
+github.com/sarathsp06/gojson/input.go:22.2,22.18 1 0
+github.com/sarathsp06/gojson/input.go:19.16,21.3 1 0
 github.com/sarathsp06/gojson/main.go:10.22,11.23 1 0
 github.com/sarathsp06/gojson/main.go:14.2,15.49 2 0
 github.com/sarathsp06/gojson/main.go:11.23,13.3 1 0

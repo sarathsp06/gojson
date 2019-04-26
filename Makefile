@@ -17,6 +17,8 @@ clean: mod
 mod:
 	$(GO) mod tidy -v
 
+test:
+	$(GO) test -coverprofile=coverage.out > /dev/null
 
 linux: clean
 	GOOS=linux GOARCH=amd64 $(GO) build -o $(BIN)/$(APP)-linux-amd64 .
