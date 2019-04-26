@@ -7,6 +7,9 @@ import (
 )
 
 func formatJSON(data []byte) ([]byte, error) {
+	if len(data) == 0 {
+		return []byte(`null`), nil
+	}
 	var obj interface{} = struct{}{}
 	if err := json.Unmarshal(data, &obj); err != nil {
 		return data, err

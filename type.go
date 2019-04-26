@@ -18,8 +18,8 @@ func getObject(jsn []byte) (interface{}, bool) {
 	case 'n':
 		return &json.RawMessage{}, false
 	case '"', '\'':
-		return "", false
+		return new(string), false
 	default:
-		return 0.0, false
+		return new(float64), false
 	}
 }

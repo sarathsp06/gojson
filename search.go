@@ -2,25 +2,16 @@ package main
 
 import (
 	"encoding/json"
-	"errors"
 	"fmt"
 	"strconv"
 )
 
 func decode(data []byte) (interface{}, error) {
-	v, ok := getObject(data)
-	if !ok {
-		return nil, errors.New("object not identified")
-	}
+	v, _ := getObject(data)
 	if err := json.Unmarshal(data, v); err != nil {
 		return nil, err
 	}
 	return v, nil
-}
-
-func lookupMap(key string, obj map[string]json.RawMessage) ([]byte, error) {
-	data, _ := obj[key]
-	return data, nil
 }
 
 func lookupSlice(key string, obj []json.RawMessage) ([]byte, error) {
@@ -35,8 +26,12 @@ func lookupSlice(key string, obj []json.RawMessage) ([]byte, error) {
 }
 
 func lookup(key []string, data []byte) ([]byte, error) {
+	fmt.Println(key, string(data))
 	if len(key) == 0 {
 		return data, nil
+	}
+	if len(data) == 0 {
+		return nil, nil
 	}
 	v, err := decode(data)
 	if err != nil {
@@ -45,7 +40,7 @@ func lookup(key []string, data []byte) ([]byte, error) {
 
 	switch v := v.(type) {
 	case *map[string]json.RawMessage:
-		data, err = lookupMap(key[0], *v)
+		data, _ = (*v)[key[0]]
 	case *[]json.RawMessage:
 		data, err = lookupSlice(key[0], *v)
 	}

@@ -1,5 +1,9 @@
 {
     "glossary": {
         "titles": ["one","two","three"]
+    },
+    "name" : {
+        "first":"Sarath",
+        "last":"Pillai"
     }
 }
