@@ -6,7 +6,7 @@ import (
 	"testing"
 )
 
-func Test_getObject(t *testing.T) {
+func TestGetObject(t *testing.T) {
 	emptyMap := make(map[string]json.RawMessage)
 	type args struct {
 		jsn []byte

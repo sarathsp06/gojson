@@ -8,7 +8,7 @@ import (
 
 func floatAddr(t float64) *float64 { return &t }
 
-func Test_decode(t *testing.T) {
+func TestDecode(t *testing.T) {
 	type args struct {
 		data []byte
 	}
@@ -23,12 +23,6 @@ func Test_decode(t *testing.T) {
 			args:    args{data: []byte(`{"dd":234}`)},
 			want:    &map[string]json.RawMessage{"dd": json.RawMessage(`234`)},
 			wantErr: false,
-		},
-		{
-			name:    "invalid json",
-			args:    args{data: []byte(`{"dd":234`)},
-			want:    nil,
-			wantErr: true,
 		},
 		{
 			name:    "invalid json",
@@ -63,11 +57,12 @@ func Test_decode(t *testing.T) {
 	}
 }
 
-func Test_lookup(t *testing.T) {
+func TestLookup(t *testing.T) {
 	type args struct {
 		key  []string
 		data []byte
 	}
+	testJSON := []byte(`{"users":[{"name":"sarath"}]}`)
 	tests := []struct {
 		name    string
 		args    args
@@ -82,19 +77,19 @@ func Test_lookup(t *testing.T) {
 		},
 		{
 			name:    "map with array ",
-			args:    args{key: []string{"users", "0", "name"}, data: []byte(`{"users":[{"name":"sarath"}]}`)},
+			args:    args{key: []string{"users", "0", "name"}, data: testJSON},
 			want:    []byte(`"sarath"`),
 			wantErr: false,
 		},
 		{
 			name:    "invalid index for array ",
-			args:    args{key: []string{"users", "-1"}, data: []byte(`{"users":[{"name":"sarath"}]}`)},
+			args:    args{key: []string{"users", "-1"}, data: testJSON},
 			want:    nil,
 			wantErr: true,
 		},
 		{
 			name:    "index bigger than array",
-			args:    args{key: []string{"users", "100", "name"}, data: []byte(`{"users":[{"name":"sarath"}]}`)},
+			args:    args{key: []string{"users", "100", "name"}, data: testJSON},
 			want:    nil,
 			wantErr: false,
 		},
