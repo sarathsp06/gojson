@@ -1,7 +1,7 @@
 GO ?= GO111MODULE=on go
 BIN ?= release
 APP ?= gojson
-GOOS ?= linux
+GOOS ?= darwin
 GOARCH ?= amd64
 
 clean: mod

@@ -8,7 +8,6 @@ import (
 )
 
 func getInputStream() io.ReadCloser {
-	//TODO : Support other input devices other than stdin
 	return os.Stdin
 }
 

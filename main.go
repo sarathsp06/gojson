@@ -1,68 +1,12 @@
 package main
 
 import (
-	"encoding/json"
 	"fmt"
 	"log"
 	"os"
-	"strconv"
 
 	"strings"
 )
-
-// getObject returns the object into which the json can be decoded
-func getObject(jsn []byte) (interface{}, bool) {
-	if len(jsn) == 0 {
-		//TODO: This is an error condition deal with it later
-		return json.RawMessage{}, false
-	}
-	switch jsn[0] {
-	case '{':
-		return make(map[string]json.RawMessage), true
-	case '[':
-		return []json.RawMessage{}, true
-	case 'n':
-		return json.RawMessage{}, false
-	case '"', '\'':
-		return "", false
-	default:
-		return 0.0, false
-	}
-}
-
-func lookup(key string, data []byte) ([]byte, error) {
-	var v, ok = getObject(data)
-	keys := strings.Split(key, ".")
-	for _, key := range keys {
-		if !ok {
-			return nil, nil
-		}
-		switch v := v.(type) {
-		case map[string]json.RawMessage:
-			if err := json.Unmarshal(data, &v); err != nil {
-				return nil, err
-			}
-			data, ok = v[key]
-			if !ok {
-				return nil, nil
-			}
-		case []json.RawMessage:
-			if err := json.Unmarshal(data, &v); err != nil {
-				return nil, err
-			}
-			idx, err := strconv.Atoi(key)
-			if err != nil {
-				return nil, nil
-			}
-			if len(v) < idx || idx < 0 {
-				return nil, nil
-			}
-			data = v[idx]
-		}
-		v, ok = getObject(data)
-	}
-	return data, nil
-}
 
 func getKey() string {
 	if len(os.Args) == 1 {

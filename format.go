@@ -7,9 +7,11 @@ import (
 )
 
 func formatJSON(data []byte) ([]byte, error) {
-	var obj map[string]interface{}
+	obj, ok := getObject(data)
+	if !ok {
+		return data, nil
+	}
 	if err := json.Unmarshal(data, &obj); err != nil {
-		//return as such
 		return data, nil
 	}
 	f := colorjson.NewFormatter()
