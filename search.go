@@ -26,7 +26,6 @@ func lookupSlice(key string, obj []json.RawMessage) ([]byte, error) {
 }
 
 func lookup(key []string, data []byte) ([]byte, error) {
-	fmt.Println(key, string(data))
 	if len(key) == 0 {
 		return data, nil
 	}
