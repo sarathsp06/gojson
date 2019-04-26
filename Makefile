@@ -4,6 +4,9 @@ APP ?= gojson
 GOOS ?= darwin
 GOARCH ?= amd64
 
+install:
+	$(GO) install 
+
 clean: mod
 	rm -rf $(BIN)
 	$(GO) clean -r . 
@@ -14,8 +17,6 @@ clean: mod
 mod:
 	$(GO) mod tidy -v
 
-install:
-	$(GO) install 
 
 linux: clean
 	GOOS=linux GOARCH=amd64 $(GO) build -o $(BIN)/$(APP)-linux-amd64 .

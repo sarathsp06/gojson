@@ -7,12 +7,9 @@ import (
 )
 
 func formatJSON(data []byte) ([]byte, error) {
-	obj, ok := getObject(data)
-	if !ok {
-		return data, nil
-	}
+	var obj interface{} = struct{}{}
 	if err := json.Unmarshal(data, &obj); err != nil {
-		return data, nil
+		return data, err
 	}
 	f := colorjson.NewFormatter()
 	f.Indent = 2
