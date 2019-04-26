@@ -19,7 +19,7 @@ const keySeperator = "."
 
 func main() {
 	key := getKey()
-	data, err := getInput()
+	data, err := getInput(getInputStream())
 	if err != nil {
 		fmt.Printf("error reading input: %s", err)
 		return

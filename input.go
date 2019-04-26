@@ -13,8 +13,7 @@ func getInputStream() io.ReadCloser {
 
 // getInput reads input from the input device ,panics if fail
 // currently it reads from stdin
-func getInput() ([]byte, error) {
-	inputStream := getInputStream()
+func getInput(inputStream io.ReadCloser) ([]byte, error) {
 	defer inputStream.Close()
 	data, err := ioutil.ReadAll(inputStream)
 	if err != nil {
