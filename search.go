@@ -81,7 +81,6 @@ func sliceRange(obj []json.RawMessage, key string) ([]byte, error) {
 	if first > last {
 		return nil, fmt.Errorf("invalid slice index %d > %d", first, last)
 	}
-	fmt.Println(first, last)
 	return sliceSerialize(obj[first:last]), nil
 }
 

@@ -60,3 +60,27 @@ Get an array value by index:
 $ echo '{"people":[{"name":"saratha"},{"name":"syam"}]}' | gojson people.1.name                                               
 "syam"
 ```
+
+Projection from a slice
+```sh
+$ echo '{"people":[{"name":"saratha"},{"name":"syam"},{"name":"singh"},{"name":"ping"}]}' | gojson people.2:.name 
+[
+  "singh",
+  "ping"
+]
+
+```
+
+Slice of array
+
+```sh
+$ echo '{"people":[{"name":"saratha"},{"name":"syam"},{"name":"singh"},{"name":"ping"}]}' | gojson people.2:5     
+[
+  {
+    "name": "singh"
+  },
+  {
+    "name": "ping"
+  }
+]
+```
