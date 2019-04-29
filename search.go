@@ -109,7 +109,7 @@ func getValue(key string, data []byte) ([]byte, error) {
 	}
 	switch v := v.(type) {
 	case *map[string]json.RawMessage:
-		data, _ = (*v)[key]
+		data = (*v)[key]
 	case *[]json.RawMessage:
 		data, err = lookupSlice(key, *v)
 	}
