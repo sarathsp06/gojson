@@ -1,9 +1,11 @@
 package main
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"strconv"
+	"strings"
 )
 
 func decode(data []byte) (interface{}, error) {
@@ -14,10 +16,12 @@ func decode(data []byte) (interface{}, error) {
 	return v, nil
 }
 
-func lookupSlice(key string, obj []json.RawMessage) ([]byte, error) {
-	idx, err := strconv.Atoi(key)
+type sliceOp func([]json.RawMessage, string) ([]byte, error)
+
+func sliceIdx(obj []json.RawMessage, index string) ([]byte, error) {
+	idx, err := strconv.Atoi(index)
 	if err != nil || idx < 0 {
-		return nil, fmt.Errorf("invalid index:%s", key)
+		return nil, fmt.Errorf("invalid index:%s", index)
 	}
 	if len(obj) < idx {
 		return nil, nil
@@ -25,26 +29,102 @@ func lookupSlice(key string, obj []json.RawMessage) ([]byte, error) {
 	return obj[idx], nil
 }
 
-func lookup(key []string, data []byte) ([]byte, error) {
-	if len(key) == 0 {
+func sliceMap(obj []json.RawMessage, key string) ([]byte, error) {
+	var result []json.RawMessage
+	for _, item := range obj {
+		val, err := getValue(key, item)
+		if err == nil && len(val) > 0 {
+			result = append(result, val)
+		}
+	}
+	return sliceSerialize(result), nil
+}
+
+func min(x, y int) int {
+	return map[bool]int{true: x, false: y}[x < y]
+}
+
+func sliceSerialize(obj []json.RawMessage) []byte {
+	if len(obj) == 0 {
+		return []byte(`[]`)
+	}
+	var result bytes.Buffer
+	result.WriteByte('[')
+	result.Write(obj[0])
+	for _, val := range obj[1:] {
+		result.WriteByte(',')
+		result.Write(val)
+	}
+	result.WriteByte(']')
+	return result.Bytes()
+}
+
+// sliceRange returns a slice of the given array with range operator as key
+// it assumes the key is a valid range operator and fallbacks to default values if not
+// eg:
+// 	`2:4` => obj[2:4]
+// 	`:4` => obj[0:4]
+// 	`2:` => obj[2:len(obj)]
+// 	`2ads:4` => obj[0:4]
+// 	`2:dsd4` => obj[2:len(obj)]
+func sliceRange(obj []json.RawMessage, key string) ([]byte, error) {
+	// get range - assumes it is always given a string with : between
+	idxs := strings.Split(key, ":")
+	first, _ := strconv.Atoi(idxs[0])
+	last, err := strconv.Atoi(idxs[1])
+	if err != nil {
+		last = len(obj)
+	}
+	first = min(first, len(obj))
+	last = min(last, len(obj))
+
+	if first > last {
+		return nil, fmt.Errorf("invalid slice index %d > %d", first, last)
+	}
+	return sliceSerialize(obj[first:last]), nil
+}
+
+func getSliceOperation(op string) sliceOp {
+	_, err := strconv.Atoi(op)
+	switch {
+	case err == nil:
+		return sliceIdx
+	case strings.Contains(op, ":"):
+		return sliceRange
+	default:
+		return sliceMap
+	}
+}
+
+func lookupSlice(key string, obj []json.RawMessage) ([]byte, error) {
+	op := getSliceOperation(key)
+	return op(obj, key)
+}
+
+func getValue(key string, data []byte) ([]byte, error) {
+	v, err := decode(data)
+	if err != nil {
+		return data, err
+	}
+	switch v := v.(type) {
+	case *map[string]json.RawMessage:
+		data = (*v)[key]
+	case *[]json.RawMessage:
+		data, err = lookupSlice(key, *v)
+	}
+	return data, err
+}
+
+func lookup(keys []string, data []byte) ([]byte, error) {
+	if len(keys) == 0 {
 		return data, nil
 	}
 	if len(data) == 0 {
 		return nil, nil
 	}
-	v, err := decode(data)
+	data, err := getValue(keys[0], data)
 	if err != nil {
 		return data, err
 	}
-
-	switch v := v.(type) {
-	case *map[string]json.RawMessage:
-		data, _ = (*v)[key[0]]
-	case *[]json.RawMessage:
-		data, err = lookupSlice(key[0], *v)
-	}
-	if err != nil {
-		return data, err
-	}
-	return lookup(key[1:], data)
+	return lookup(keys[1:], data)
 }

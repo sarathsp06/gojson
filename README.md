@@ -7,18 +7,21 @@ GoJSON is a command line utility to handle json in command line.
 - [x] Retrieve nested objects
 - [x] Pretty print JSON
 - [x] Validate JSON
-- [ ] Aggregate finct
+- [x] Aggregate functions
 
 
 ## Installing
 
-With go
+**Go Dev version**
 
 ```sh
 $ go get -u github.com/sarathsp06/gojson
 ```
 
-Or you may download the binary here [download](https://github.com/sarathsp06/gojson/tree/master/release) and use the binary as such
+
+**Binray Release**
+
+[download](https://github.com/sarathsp06/gojson/releases) and use the binary as such for your platform
 
 
 **Tip:**
@@ -26,20 +29,24 @@ Or you may download the binary here [download](https://github.com/sarathsp06/goj
 
 
 #### Key Syntax
-* Key is a set of `.` seperated nested keys
+* Key is a set of `.` seperated nested values
 * Can use 0-n numbers to refer to index in arrays
- 
+* Can use `lower:upper` syntax to refer to a range of an array. Eg: players.1:3 
+* Can use keys of inner objects directly on arrays or range of them. Eg:  players.name where players is an array
+
 ### Usage Examples
 
 ##### Getting a value 
 
 * Get a string:
+
 ```sh
 $ echo '{"name":{"first":"Sarath","last":"Pillai"}}' | gojson name.last
 "Pillai"
 ```
 
 * Get a block of JSON:
+
 ```sh
 $ echo '{"name":{"first":"Sarath","last":"Pillai"}}'  | gojson name
 
@@ -50,13 +57,40 @@ $ echo '{"name":{"first":"Sarath","last":"Pillai"}}'  | gojson name
 ```
 
 * Try to get a non-existent key:
+
 ```sh
 $ echo '{"name":{"first":"Sarath","last":"Pillai"}}' | gojson names
 nil
+
 ```
 
-Get an array value by index:
+* Get an array value by index:
+
 ```sh
 $ echo '{"people":[{"name":"saratha"},{"name":"syam"}]}' | gojson people.1.name                                               
 "syam"
+```
+
+* Projection from a slice
+
+```sh
+$ echo '{"people":[{"name":"saratha"},{"name":"syam"},{"name":"singh"},{"name":"ping"}]}' | gojson people.2:.name 
+[
+  "singh",
+  "ping"
+]
+```
+
+* Slice of array
+
+```sh
+$ echo '{"people":[{"name":"saratha"},{"name":"syam"},{"name":"singh"},{"name":"ping"}]}' | gojson people.2:5     
+[
+  {
+    "name": "singh"
+  },
+  {
+    "name": "ping"
+  }
+]
 ```
