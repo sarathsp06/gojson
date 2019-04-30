@@ -33,7 +33,7 @@ func sliceMap(obj []json.RawMessage, key string) ([]byte, error) {
 	var result []json.RawMessage
 	for _, item := range obj {
 		val, err := getValue(key, item)
-		if err == nil {
+		if err == nil && len(val) > 0 {
 			result = append(result, val)
 		}
 	}
@@ -46,7 +46,7 @@ func min(x, y int) int {
 
 func sliceSerialize(obj []json.RawMessage) []byte {
 	if len(obj) == 0 {
-		return nil
+		return []byte(`[]`)
 	}
 	var result bytes.Buffer
 	result.WriteByte('[')
