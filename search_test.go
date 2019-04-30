@@ -195,7 +195,7 @@ func Test_sliceSerialize(t *testing.T) {
 		{
 			name: "empty slice",
 			args: args{obj: nil},
-			want: nil,
+			want: []byte(`[]`),
 		},
 		{
 			name: "multi item slice",
@@ -282,6 +282,17 @@ func Test_sliceMap(t *testing.T) {
 			),
 				key: "name"},
 			want:    []byte(`["sarath","syam","23"]`),
+			wantErr: false,
+		},
+		{
+			name: "array of objects with  missing fields",
+			args: args{obj: rawMessages(
+				`{"name":"sarath"}`,
+				`{"1name":"syam"}`,
+				`{"2name":"23"}`,
+			),
+				key: "name"},
+			want:    []byte(`["sarath"]`),
 			wantErr: false,
 		},
 	}
