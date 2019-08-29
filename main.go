@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/csv"
 	"fmt"
 	"os"
 
@@ -15,7 +16,17 @@ func getKey() string {
 	return strings.TrimFunc(key, func(c rune) bool { return c == '.' })
 }
 
-const keySeperator = "."
+func splitKey(key string, seperator rune) ([]string, error) {
+	r := csv.NewReader(strings.NewReader(key))
+	r.Comma = seperator
+	keys, err := r.Read()
+	if err != nil {
+		return nil, err
+	}
+	return keys, err
+}
+
+const keySeperator = '.'
 
 func main() {
 	key := getKey()
@@ -24,12 +35,16 @@ func main() {
 		fmt.Printf("error reading input: %s", err)
 		return
 	}
-	keys := strings.Split(key, keySeperator)
+	keys, err := splitKey(key, keySeperator)
+	if err != nil {
+		fmt.Printf("invalid key. Error : %+v ", err)
+		return
+	}
 	if key != "" {
 		data, err = lookup(keys, data)
 	}
 	if err != nil {
-		fmt.Printf("error occurred looking up key . Error : %+v ", err)
+		fmt.Printf("error occurred looking up key. Error : %+v ", err)
 		return
 	}
 	formattedJSON, err := formatJSON(data)
