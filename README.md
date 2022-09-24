@@ -14,7 +14,7 @@ GoJSON is a command line utility to handle json in command line.
 **Go Dev version**
 
 ```sh
-$ go get -u github.com/sarathsp06/gojson
+go install  github.com/sarathsp06/gojson@latest
 ```
 
 **Binray Release**
