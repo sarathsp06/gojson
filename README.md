@@ -1,10 +1,7 @@
-## GoJSON [![Build Status](https://travis-ci.org/sarathsp06/gojson.svg?branch=master)](https://travis-ci.org/sarathsp06/gojson)  [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=sarathsp06_gojson&metric=alert_status)](https://sonarcloud.io/dashboard?id=sarathsp06_gojson) [![Go Report Card](https://goreportcard.com/badge/github.com/sarathsp06/gojson)](https://goreportcard.com/report/github.com/sarathsp06/gojson) ![Last Commit](https://img.shields.io/github/last-commit/sarathsp06/gojson.svg)
-GoJSON is a command line utility to handle json in command line.  
+## GoJSON  [![Go Report Card](https://goreportcard.com/badge/github.com/sarathsp06/gojson)](https://goreportcard.com/report/github.com/sarathsp06/gojson) ![Last Commit](https://img.shields.io/github/last-commit/sarathsp06/gojson.svg)
+🎉 GoJSON 🚀 - A command-line utility to jazz up your JSON handling!
 
-
-
-Wrote it for fun, because the mandatory 3 hour meeting where I had nothing to contribute to was too boring.
-If you are looking for usefull json command line tools , following list might help
+🛠️ Built for fun during a never-ending 3-hour meeting where I just nodded along. 🙃 If you're scouting for some seriously useful JSON command-line tools, check out the list below!
 * [dsq](https://github.com/multiprocessio/dsq) - Tool for running SQL queries against JSON, CSV, Excel, Parquet, and more.
 * [fx](https://github.com/antonmedv/fx) - A interactive terminal tool.
 * [jo](https://github.com/jpmens/jo) - A small utility to create JSON objects
