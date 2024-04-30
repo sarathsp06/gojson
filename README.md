@@ -1,4 +1,4 @@
-## GoJSON  [![Go Report Card](https://goreportcard.com/badge/github.com/sarathsp06/gojson)](https://goreportcard.com/report/github.com/sarathsp06/gojson) ![Last Commit](https://img.shields.io/github/last-commit/sarathsp06/gojson.svg)
+## GoJSON  [![Go Report Card](https://goreportcard.com/badge/github.com/sarathsp06/gojson)](https://goreportcard.com/report/github.com/sarathsp06/gojson) ![Last Commit](https://img.shields.io/github/last-commit/sarathsp06/gojson.svg) [![Go](https://github.com/sarathsp06/gojson/actions/workflows/go.yml/badge.svg)](https://github.com/sarathsp06/gojson/actions/workflows/go.yml)
 🎉 GoJSON 🚀 - A command-line utility to jazz up your JSON handling!
 
 🛠️ Built for fun during a never-ending 3-hour meeting where I just nodded along. 🙃 If you're scouting for some seriously useful JSON command-line tools, check out the list below!
