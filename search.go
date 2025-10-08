@@ -23,7 +23,7 @@ func sliceIdx(obj []json.RawMessage, index string) ([]byte, error) {
 	if err != nil || idx < 0 {
 		return nil, fmt.Errorf("invalid index:%s", index)
 	}
-	if len(obj) < idx {
+	if len(obj) <= idx {
 		return nil, nil
 	}
 	return obj[idx], nil

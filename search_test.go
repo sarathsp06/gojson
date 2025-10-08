@@ -57,6 +57,123 @@ func TestDecode(t *testing.T) {
 	}
 }
 
+func Test_getValue(t *testing.T) {
+	type args struct {
+		key  string
+		data []byte
+	}
+	tests := []struct {
+		name    string
+		args    args
+		want    []byte
+		wantErr bool
+	}{
+		{
+			name:    "get from map",
+			args:    args{key: "name", data: []byte(`{"name":"sarath"}`)},
+			want:    []byte(`"sarath"`),
+			wantErr: false,
+		},
+		{
+			name:    "get from slice",
+			args:    args{key: "0", data: []byte(`["sarath","syam"]`)},
+			want:    []byte(`"sarath"`),
+			wantErr: false,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got, err := getValue(tt.args.key, tt.args.data)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("getValue() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("getValue() = %v, want %v", string(got), string(tt.want))
+			}
+		})
+	}
+}
+
+func Test_sliceIdx(t *testing.T) {
+	type args struct {
+		obj   []json.RawMessage
+		index string
+	}
+	tests := []struct {
+		name    string
+		args    args
+		want    []byte
+		wantErr bool
+	}{
+		{
+			name:    "valid index",
+			args:    args{obj: rawMessages(`"a"`, `"b"`), index: "1"},
+			want:    []byte(`"b"`),
+			wantErr: false,
+		},
+		{
+			name:    "invalid index",
+			args:    args{obj: rawMessages(`"a"`, `"b"`), index: "a"},
+			want:    nil,
+			wantErr: true,
+		},
+		{
+			name:    "out of bounds index",
+			args:    args{obj: rawMessages(`"a"`, `"b"`), index: "2"},
+			want:    nil,
+			wantErr: false,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got, err := sliceIdx(tt.args.obj, tt.args.index)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("sliceIdx() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("sliceIdx() = %v, want %v", string(got), string(tt.want))
+			}
+		})
+	}
+}
+
+func Test_min(t *testing.T) {
+	type args struct {
+		x int
+		y int
+	}
+	tests := []struct {
+		name string
+		args args
+		want int
+	}{
+		{
+			name: "x < y",
+			args: args{x: 1, y: 2},
+			want: 1,
+		},
+		{
+			name: "x > y",
+			args: args{x: 2, y: 1},
+			want: 1,
+		},
+		{
+			name: "x == y",
+			args: args{x: 1, y: 1},
+			want: 1,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := min(tt.args.x, tt.args.y); got != tt.want {
+				t.Errorf("min() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
 func TestLookup(t *testing.T) {
 	type args struct {
 		key  []string
@@ -245,6 +362,18 @@ func Test_sliceRange(t *testing.T) {
 			name:    ":n",
 			args:    args{obj: rawMessages(`233`, `123`, `"test"`, `test`), key: `:2`},
 			want:    []byte(`[233,123]`),
+			wantErr: false,
+		},
+		{
+			name:    "invalid n:",
+			args:    args{obj: rawMessages(`233`, `123`, `"test"`, `gama`), key: `a:`},
+			want:    []byte(`[233,123,"test",gama]`),
+			wantErr: false,
+		},
+		{
+			name:    "invalid :n",
+			args:    args{obj: rawMessages(`233`, `123`, `"test"`, `test`), key: `:b`},
+			want:    []byte(`[233,123,"test",test]`),
 			wantErr: false,
 		},
 	}
